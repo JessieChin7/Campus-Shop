@@ -1,0 +1,482 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Campus Shop API",
+    "description": "Campus Shop API developed by Jessie Chin"
+  },
+  "host": "18.180.183.121/api/1.0",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/products/{category(all|women|men|accessories)}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Search a product by category and page number",
+        "parameters": [
+          {
+            "name": "category(all|women|men|accessories)",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "example": "women"
+          },
+          {
+            "name": "paging",
+            "in": "query",
+            "type": "string",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/products/search": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Search a product by keyword and page number",
+        "parameters": [
+          {
+            "name": "paging",
+            "in": "query",
+            "type": "string",
+            "required": true,
+            "example": 1
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "type": "string",
+            "example": "洋裝"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/products/detail": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Search a product by id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "type": "string",
+            "example": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/products/create": {
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Create a new product",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "category",
+            "in": "formData",
+            "description": "Category of the product",
+            "required": true,
+            "type": "string",
+            "example": "accessories"
+          },
+          {
+            "name": "title",
+            "in": "formData",
+            "description": "Title of the product",
+            "required": true,
+            "type": "string",
+            "example": "韓版拼色帽"
+          },
+          {
+            "name": "description",
+            "in": "formData",
+            "description": "Description of the product",
+            "required": true,
+            "type": "string",
+            "example": "韓版拼色帽，簡約時尚"
+          },
+          {
+            "name": "price",
+            "in": "formData",
+            "description": "Price of the product",
+            "required": true,
+            "type": "number",
+            "example": 399
+          },
+          {
+            "name": "texture",
+            "in": "formData",
+            "description": "Texture of the product",
+            "required": true,
+            "type": "string",
+            "example": "棉"
+          },
+          {
+            "name": "wash",
+            "in": "formData",
+            "description": "Wash of the product",
+            "required": true,
+            "type": "string",
+            "example": "請勿機洗，以柔軟的布擦拭表面污漬即可"
+          },
+          {
+            "name": "place",
+            "in": "formData",
+            "description": "Place of the product",
+            "required": true,
+            "type": "string",
+            "example": "台灣"
+          },
+          {
+            "name": "note",
+            "in": "formData",
+            "description": "Note of the product",
+            "required": true,
+            "type": "string",
+            "example": "商品顏色以實際物為主"
+          },
+          {
+            "name": "story",
+            "in": "formData",
+            "description": "Story of the product",
+            "required": true,
+            "type": "string",
+            "example": "品牌故事請見官網"
+          },
+          {
+            "name": "colors",
+            "in": "formData",
+            "description": "Colors of the product",
+            "required": true,
+            "type": "string",
+            "example": "[{\"code\": \"FF0000\", \"name\": \"紅色\"}]"
+          },
+          {
+            "name": "variants",
+            "in": "formData",
+            "description": "Variants of the product",
+            "required": true,
+            "type": "string",
+            "example": "[{\"size\": \"S\", \"stock\": 5, \"color_code\": \"334455\"}]"
+          },
+          {
+            "name": "main_image",
+            "in": "formData",
+            "description": "Main image of the product",
+            "required": true,
+            "type": "file"
+          },
+          {
+            "name": "images",
+            "in": "formData",
+            "description": "Additional images of the product",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "file"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product created successfully!"
+          }
+        }
+      }
+    },
+    "/user/signup": {
+      "post": {
+        "description": "User Sign Up API",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "John Doe"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "johndoe@example.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "password123"
+                },
+                "provider": {
+                  "type": "string",
+                  "example": "native"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "admin"
+                },
+                "access_token": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "email",
+                "provider"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string",
+                      "example": "JWTAccessToken"
+                    },
+                    "access_expired": {
+                      "type": "integer",
+                      "example": 3600
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 123
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "johndoe@example.com"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Client Error Response"
+          },
+          "409": {
+            "description": "Email Already Exists"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/signin": {
+      "post": {
+        "description": "User Sign In API",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "example": "native"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "test@test.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "testttt"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Client Error Response"
+          },
+          "403": {
+            "description": "Sign In Failed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/profile": {
+      "get": {
+        "description": "User Sign Profile API",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Client Error (No token) Response"
+          },
+          "403": {
+            "description": "Client Error (Wrong token) Response"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/order/checkout": {
+      "post": {
+        "description": "",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "prime": {
+                  "example": "ccc1491581661f700bcc1cafec673c741f0665ca77550fe828ef38ee1437a2b8"
+                },
+                "order": {
+                  "example": {
+                    "shipping": "delivery",
+                    "payment": "credit_card",
+                    "subtotal": 1234,
+                    "freight": 14,
+                    "total": 1300,
+                    "recipient": {
+                      "name": "jessie",
+                      "phone": "0952232168",
+                      "email": "yuan2001@live.com",
+                      "address": "蘋果派站",
+                      "time": "morning"
+                    },
+                    "list": [
+                      {
+                        "id": "201807202157",
+                        "name": "活力花紋長筒牛仔褲",
+                        "price": 1299,
+                        "color": {
+                          "code": "DDF0FF",
+                          "name": "淺藍"
+                        },
+                        "size": "M",
+                        "qty": 1
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Client Error (No token) Response"
+          },
+          "403": {
+            "description": "Client Error (Wrong token) Response"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  }
+}
