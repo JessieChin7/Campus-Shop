@@ -1,4 +1,9 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+    reactStrictMode: true,
+    env: {
+        API_SERVER: 'localhost:5000',
+    }
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
