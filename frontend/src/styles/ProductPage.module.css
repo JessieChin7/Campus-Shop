@@ -1,0 +1,61 @@
+/* ProductPage.module.css */
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.productContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: left;
+    margin: 20px;
+}
+
+.carouselContainer {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+.carousel {
+    width: 500px; /* Change this to the desired width */
+    height: 500px; /* Change this to the desired height */
+  }
+
+.buttonGroup {
+    display: grid;
+    flex-direction: row;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    justify-items: center;
+    width: 30%;
+    gap: 20px;
+}
+
+.roundButton {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.details {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.detail-column {
+    flex-basis: 45%;
+}
+
+
+  

@@ -4,7 +4,7 @@
   height: 80px;
   background-color: #B3CAB9;
   z-index: 1;
-  position:fixed;
+  position:sticky;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

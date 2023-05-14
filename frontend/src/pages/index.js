@@ -1,9 +1,11 @@
 // pages/HomePage.js
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { getTopFiveProducts } from '../services/api';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Card } from 'react-bootstrap';
+import styles from '../styles/HomePage.module.css';  // 引入 CSS 模組
 
 const HomePage = () => {
     const [topFiveProducts, setTopFiveProducts] = useState([]);
@@ -13,33 +15,23 @@ const HomePage = () => {
     }, []);
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-        }}>
+        <div className={styles.container}>
             <Header />
-            <section
-                id="Hot-Notes"
-                style={{
-                    width: '100vw',
-                    height: '100vh',
-                    textAlign: 'center',
-                    background: 'rgba(0,255,0,0.02)',
-                    padding: '20px',
-                }}
-            >
-                <h1>Top 5 Products</h1>
-                <div className="d-flex justify-content-around flex-wrap">
+            <section id="Hot-Notes" className={styles.hotNotesContainer}>
+                <h1>Hot Notes</h1>
+                <div className={styles.cardContainer}>
                     {topFiveProducts.map(product => (
-                        <Card style={{ width: '240px' }} key={product.id}>
-                            <Card.Img variant="top" src={product.main_image} />
-                            <Card.Body>
-                                <Card.Title>{product.title}</Card.Title>
-                                <Card.Text>
-                                    Price: {product.price}
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
+                        <Link href={`/products/${product.id}`} key={product.id}>
+                            <Card className={styles.card}>
+                                <Card.Img className={styles.cardImage} variant="top" src={product.main_image} />
+                                <Card.Body>
+                                    <Card.Title>{product.title}</Card.Title>
+                                    <Card.Text>
+                                        NT$ {product.price}
+                                    </Card.Text>
+                                </Card.Body>
+                            </Card>
+                        </Link>
                     ))}
                 </div>
             </section>

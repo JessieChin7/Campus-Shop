@@ -1,0 +1,31 @@
+/* HomePage.module.css */
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.hotNotesContainer {
+    text-align: center;
+    padding:20px;
+}
+
+.cardContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.card {
+    width: 240px;
+    background-color: #E0DDC2; 
+    border-radius: 0%;
+    border-width: 0px;
+    text-align: left;
+}
+.cardImage {
+    padding:20px;
+    height: auto; 
+    align-self: center;
+    object-fit: cover; 
+}
