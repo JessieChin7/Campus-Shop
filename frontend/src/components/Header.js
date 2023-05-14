@@ -1,30 +1,28 @@
 // components/Header.js
 import Link from 'next/link';
-import { Anchor } from 'antd';
+import styles from '../styles/Header.module.css';
+
 const Header = () => (
-    <header>
-        <nav style={{ padding: '20px', flexDirection: 'row', display: 'flex' }}>
-            <Link href="/">Campus Shop</Link>
-            <Anchor
-                direction="horizontal"
-                items={[
-                    {
-                        key: 'Hot Notes',
-                        href: '#Hot-Notes',
-                        title: 'Hot Notes',
-                    },
-                    {
-                        key: 'Categories',
-                        href: '#Categories',
-                        title: 'Categories',
-                    },
-                    {
-                        key: 'All Notes',
-                        href: '#All-Notes',
-                        title: 'All Notes',
-                    },
-                ]}
-            />
+    <header className={styles.header}>
+        <nav className={styles.menu}>
+            <Link href="/" className={styles.logo}>
+                Campus Shop
+            </Link>
+            <Link href="/#Hot-Notes" className={styles.menuItem}>
+                Hot Notes
+            </Link>
+            <Link href="/#Categories" className={styles.menuItem}>
+                Categories
+            </Link>
+            <Link href="/#All-Notes" className={styles.menuItem}>
+                All Notes
+            </Link>
+        </nav>
+        <nav className={styles.rightHeader}>
+            <input className={`form-control ${styles.search}`} type="search" placeholder="Search" aria-label="Search" />
+            <i className={`bi bi-bookmark ${styles.icon}`} />
+            <i className={`bi bi-cart ${styles.icon}`} />
+            <i className={`bi bi-person ${styles.icon}`} />
         </nav>
     </header>
 );

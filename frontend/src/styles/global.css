@@ -1,0 +1,6 @@
+/* styles/global.css */
+@import "~@fontsource/darker-grotesque/index.css";
+
+body {
+  font-family: 'Darker Grotesque';
+}

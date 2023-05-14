@@ -9,8 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "ant-design": "^1.0.0",
-    "antd": "^5.4.7",
+    "@fontsource/darker-grotesque": "^4.5.9",
+    "bootstrap": "^5.2.3",
+    "bootstrap-icons": "^1.10.5",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
     "next": "^13.4.2",
