@@ -9,8 +9,6 @@ const axiosInstance = axios.create({
     // },
 });
 
-// Your existing methods...
-
 // User Sign Up API
 export const signUpUser = (userData) => {
     return axiosInstance.post('/signup', userData);
@@ -24,6 +22,36 @@ export const signInUser = (userData) => {
 // User Profile API
 export const getUserProfile = () => {
     return axiosInstance.get('/profile');
+};
+
+// Get a single product by ID
+export const getProductById = (id) => {
+    return axiosInstance.get(`/products/detail?id=${id}`);
+};
+
+// Get top five products
+export const getTopFiveProducts = () => {
+    return axiosInstance.get('/products/top-five');
+};
+
+// Get products by category
+export const getProductsByCategory = (category) => {
+    return axiosInstance.get(`/products/category?category=${category}`);
+};
+
+// Create a new product
+export const createProduct = (productData, config) => {
+    return axiosInstance.post('/products', productData, config);
+};
+
+// Update a product
+export const updateProduct = (id, productData, config) => {
+    return axiosInstance.put(`/products/${id}`, productData, config);
+};
+
+// Delete a product
+export const deleteProduct = (id) => {
+    return axiosInstance.delete(`/products/${id}`);
 };
 
 

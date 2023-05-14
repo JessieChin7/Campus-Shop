@@ -1,22 +1,22 @@
 // pages/HomePage.js
 import { useState, useEffect } from 'react';
+import { getTopFiveProducts } from '../services/api';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-// import { getHotNotes, getCategories, getAllNotes } from '../services/api';
+import { Card } from 'react-bootstrap';
 
 const HomePage = () => {
-    const [hotNotes, setHotNotes] = useState([]);
-    const [categories, setCategories] = useState([]);
-    const [allNotes, setAllNotes] = useState([]);
+    const [topFiveProducts, setTopFiveProducts] = useState([]);
 
-    // useEffect(() => {
-    //     getHotNotes().then(response => setHotNotes(response.data));
-    //     getCategories().then(response => setCategories(response.data));
-    //     getAllNotes().then(response => setAllNotes(response.data));
-    // }, []);
+    useEffect(() => {
+        getTopFiveProducts().then(response => setTopFiveProducts(response.data));
+    }, []);
 
     return (
-        <div>
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+        }}>
             <Header />
             <section
                 id="Hot-Notes"
@@ -25,22 +25,24 @@ const HomePage = () => {
                     height: '100vh',
                     textAlign: 'center',
                     background: 'rgba(0,255,0,0.02)',
+                    padding: '20px',
                 }}
-            />
-            <section
-                id="Categories"
-                style={{
-                    width: '100vw',
-                    height: '100vh',
-                    textAlign: 'center',
-                    background: 'rgba(0,0,255,0.02)',
-                }}
-            />
-            <section
-                id="All-Notes"
-                style={{ width: '100vw', height: '100vh', textAlign: 'center', background: '#FFFBE9' }}
-            />
-
+            >
+                <h1>Top 5 Products</h1>
+                <div className="d-flex justify-content-around flex-wrap">
+                    {topFiveProducts.map(product => (
+                        <Card style={{ width: '240px' }} key={product.id}>
+                            <Card.Img variant="top" src={product.main_image} />
+                            <Card.Body>
+                                <Card.Title>{product.title}</Card.Title>
+                                <Card.Text>
+                                    Price: {product.price}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    ))}
+                </div>
+            </section>
             <Footer />
         </div>
     );

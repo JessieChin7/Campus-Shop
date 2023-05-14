@@ -10,13 +10,16 @@
   },
   "dependencies": {
     "@fontsource/darker-grotesque": "^4.5.9",
+    "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.5",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
     "next": "^13.4.2",
     "react": "18.2.0",
+    "react-bootstrap": "^2.7.4",
     "react-dom": "18.2.0",
-    "react-modal": "^3.16.1"
+    "react-modal": "^3.16.1",
+    "react-scroll": "^1.8.9"
   }
 }
