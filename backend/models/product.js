@@ -11,9 +11,25 @@ exports.getProductById = async (id) => {
     return product;
 };
 
-exports.getTopFiveProducts = async () => {
-    const [rows] = await pool.query('SELECT * FROM CampusShop.Product ORDER BY id DESC LIMIT 5');
-    return rows;
+exports.getTopFiveProducts = async function () {
+    const self = this;
+    const query = `
+    SELECT p.*, SUM(oi.qty) as total_qty
+    FROM CampusShop.Product p
+    JOIN CampusShop.Variant v ON p.id = v.product_id
+    JOIN CampusShop.OrderItem oi ON v.id = oi.variant_id
+    GROUP BY p.id
+    ORDER BY total_qty DESC
+    LIMIT 5
+    `;
+    const result = await pool.query(query);
+    console.log(result);
+    return result.length > 0 ? result[0] : await self.getProductsByIdDesc();
+};
+
+exports.getProductsByIdDesc = async () => {
+    const result = await pool.query('SELECT * FROM CampusShop.Product ORDER BY id DESC LIMIT 5');
+    return result;
 };
 
 exports.getProductsByCategory = async (category) => {

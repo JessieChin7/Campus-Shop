@@ -70,8 +70,9 @@ router.get('/top-five', async function (req, res) {
   res.json(products);
 });
 
-router.get('/category/:category', async function (req, res) {
-  const products = await productModel.getProductsByCategory(req.params.category);
+router.get('/category', async function (req, res) {
+  let category = req.query.category;
+  const products = await productModel.getProductsByCategory(category);
   res.json(products);
 });
 
@@ -80,13 +81,12 @@ router.post('/', upload.fields([{ name: 'main_image', maxCount: 1 }, { name: 'im
   newProduct.main_image = req.files.main_image ? req.files.main_image[0].location : null;
   newProduct.images = req.files.images ? req.files.images.map(file => file.location) : [];
   const productId = await productModel.createProduct(newProduct);
-  newProduct.variants.forEach(async variant => {
+  for (const variant of newProduct.variants) {
     variant.product_id = productId;
-    await productModel.createVariant(productId, variant);
-  });
+    await productModel.createVariant(variant);
+  }
   res.status(200).json({ newProduct: newProduct });
 });
-
 
 router.put('/:id', validateProduct, async function (req, res) {
   const updatedProduct = req.body;

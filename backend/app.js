@@ -24,8 +24,10 @@ app.use('/user', userRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 // 設置 CORS 選項
 const corsOptions = {
-  origin: 'https://appworks.hychin.me',
-  optionsSuccessStatus: 200, // 適當地回應某些舊瀏覽器的預檢請求
+  "origin": "*",
+  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  "preflightContinue": false,
+  "optionsSuccessStatus": 204
 };
 
 // 啟用 CORS 中間件，使用指定的選項
