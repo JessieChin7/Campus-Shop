@@ -11,6 +11,16 @@ const cors = require('cors');
 var http = require('http');
 const swaggerUi = require('swagger-ui-express')
 const swaggerFile = require('./swagger_output.json') // 剛剛輸出的 JSON
+// 設置 CORS 選項
+const corsOptions = {
+  "origin": "*",
+  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  "preflightContinue": false,
+  "optionsSuccessStatus": 204
+};
+
+// 啟用 CORS 中間件，使用指定的選項
+app.use(cors(corsOptions));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -22,16 +32,7 @@ app.use('/products', productsRouter);
 app.use('/user', userRouter);
 // app.use('/order', orderRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
-// 設置 CORS 選項
-const corsOptions = {
-  "origin": "*",
-  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-  "preflightContinue": false,
-  "optionsSuccessStatus": 204
-};
 
-// 啟用 CORS 中間件，使用指定的選項
-app.use(cors(corsOptions));
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   res.status(404);
