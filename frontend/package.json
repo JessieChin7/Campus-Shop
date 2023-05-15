@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@fontsource/darker-grotesque": "^4.5.9",
+    "antd": "^5.4.7",
     "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.5",

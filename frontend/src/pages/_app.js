@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import '../styles/global.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+// import 'antd/dist/antd.css';
 function MyApp({ Component, pageProps }) {
     useEffect(() => {
         Modal.setAppElement('#__next');

@@ -6,6 +6,7 @@ import Footer from '../../components/Footer';
 import { Carousel } from 'react-bootstrap';
 import styles from '../../styles/ProductPage.module.css';
 import { Button } from 'react-bootstrap';
+// import StackCards from '../../components/StackCards';
 const ProductPage = () => {
     const router = useRouter();
     const { id } = router.query;
@@ -53,8 +54,13 @@ const ProductPage = () => {
                         <h2>Price: NT${product.price}</h2>
                         <h2>Author: {product.author}</h2>
                         <p>{product.description}</p>
+                        <p>{product.note}</p>
+                        <p>{product.catalog}</p>
                     </div>
                     <div className={styles.detailColumn}>
+                        <h2>Price: NT${product.price}</h2>
+                        <h2>Author: {product.author}</h2>
+                        <p>{product.description}</p>
                         <p>{product.note}</p>
                         <p>{product.catalog}</p>
                     </div>

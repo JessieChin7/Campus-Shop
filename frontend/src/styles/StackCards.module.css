@@ -1,0 +1,19 @@
+.stacked-card-container {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .stacked-card-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: all 0.5s;
+  }
+  

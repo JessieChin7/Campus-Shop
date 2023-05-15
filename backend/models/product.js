@@ -2,6 +2,11 @@ const pool = require('../db');
 const util = require('util');
 pool.query = util.promisify(pool.query);
 
+exports.getAllProducts = async function () {
+    const rows = await pool.query('SELECT * FROM CampusShop.Product');
+    return rows;
+};
+
 exports.getProductById = async (id) => {
     const product = await pool.query('SELECT * FROM CampusShop.Product WHERE id = ?', [id]);
     if (!product) {
@@ -23,7 +28,6 @@ exports.getTopFiveProducts = async function () {
     LIMIT 5
     `;
     const result = await pool.query(query);
-    console.log(result);
     return result.length > 0 ? result[0] : await self.getProductsByIdDesc();
 };
 

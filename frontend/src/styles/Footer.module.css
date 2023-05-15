@@ -5,6 +5,7 @@
     height: 80px;
     background-color: #B3CAB9;
     bottom: 0;
+    position: relative;
     justify-content: center;
     align-content: center;
     align-items: center;

@@ -110,4 +110,48 @@ router.delete('/:id', async function (req, res) {
 });
 
 
+//comments
+const puppeteer = require('puppeteer');
+
+async function getShopeeReviews(url) {
+  try {
+    const browser = await puppeteer.launch({ headless: 'new' });
+    const page = await browser.newPage();
+    await page.goto(url);
+    await page.waitForTimeout(3000); // 等待3秒
+    await page.waitForSelector('.shopee-product-rating__main', { timeout: 100000 });
+    // 爬取評價資訊
+    const reviews = await page.evaluate(() => {
+      const reviewElements = document.querySelectorAll('.shopee-product-rating__main');
+      return Array.from(reviewElements)
+        .slice(0, 30) // 只保留前 30 個評價
+        .map(reviewElement => {
+          const user = reviewElement.querySelector('.shopee-product-rating__author-name').textContent;
+          const content = reviewElement.children[2].textContent; // 用索引選擇子元素，此處須注意順序可能會有變動
+          const date = reviewElement.querySelector('.shopee-product-rating__time').textContent;
+          // 如果有圖片或影片，則爬取其網址
+          const media = Array.from(reviewElement.querySelectorAll('.shopee-rating-media-list-image__content')).map(img => img.style.backgroundImage.slice(5, -2));
+          return { user, content, date, media };
+        });
+    });
+    await browser.close();
+    return reviews;
+  } catch (error) {
+    console.error('Error occurred:', error);
+  }
+}
+
+router.get('/shopee-reviews', async function (req, res) {
+  const url = req.query.url;
+  const reviews = await getShopeeReviews(url);
+  res.json(reviews);
+});
+
+router.get('/all', async function (req, res) {
+  const products = await productModel.getAllProducts();
+  res.json(products);
+});
+
+
+
 module.exports = router;

@@ -4,24 +4,33 @@ import axios from "axios";
 const API_HOSTNAME = `http://${process.env.API_SERVER}`;
 const axiosInstance = axios.create({
     baseURL: API_HOSTNAME,
-    // headers: {
-    //     Authorization: `Bearer ${process.env.ADMIN_JWT_TOKEN}`,
-    // },
 });
 
-// User Sign Up API
 export const signUpUser = (userData) => {
-    return axiosInstance.post('/signup', userData);
+    return axiosInstance.post('/user/signup', userData);
 };
 
-// User Sign In API
-export const signInUser = (userData) => {
-    return axiosInstance.post('/signin', userData);
+export const signInUser = async (userData) => {
+    try {
+        const response = await axiosInstance.post('/user/signin', userData);
+        if (response.status === 200) {
+            localStorage.setItem('access_token', response.data.data.access_token);
+        }
+        return response;
+    } catch (error) {
+        console.error('Error during sign in:', error);
+        throw error;
+    }
 };
 
 // User Profile API
-export const getUserProfile = () => {
-    return axiosInstance.get('/profile');
+export const getUserProfile = (token) => {
+    console.log(token);
+    return axiosInstance.get('/user/profile', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
 };
 
 // Get a single product by ID
@@ -32,6 +41,11 @@ export const getProductById = (id) => {
 // Get top five products
 export const getTopFiveProducts = () => {
     return axiosInstance.get('/products/top-five');
+};
+
+// Get top five products
+export const getAllProducts = () => {
+    return axiosInstance.get('/products/all');
 };
 
 // Get products by category
