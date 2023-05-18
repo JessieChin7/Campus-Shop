@@ -8,13 +8,29 @@ exports.getAllProducts = async function () {
 };
 
 exports.getProductById = async (id) => {
-    const product = await pool.query('SELECT * FROM CampusShop.Product WHERE id = ?', [id]);
+    const productRows = await pool.query('SELECT * FROM CampusShop.Product WHERE id = ?', [id]);
+    const product = productRows[0]; // 取得產品資料
+
     if (!product) {
         throw new Error(`Product with id ${id} not found`);
     }
-    const [variantRows] = await pool.query('SELECT * FROM CampusShop.Variant WHERE product_id = ?', [id]);
+
+    const variantRows = await pool.query('SELECT * FROM CampusShop.Variant WHERE product_id = ?', [id]);
+
+    // 將 variantRows 的每一個項目轉換為 JavaScript 物件，並存入 product 的 variants 屬性中
+    product.variants = variantRows.map(variantRow => {
+        return {
+            version: variantRow.version,
+            stock: variantRow.stock,
+            id: variantRow.id,
+            product_id: variantRow.product_id,
+            part: variantRow.part
+        };
+    });
+
     return product;
 };
+
 
 exports.getTopFiveProducts = async function () {
     const self = this;

@@ -37,8 +37,22 @@ const HomePage = () => {
                     ))}
                 </div>
             </section>
-            <section id="Categories" className={styles.hotNotesContainer}>
-                <h1>Category</h1>
+            <section id="Categories" className={styles.categoriesSection}>
+                <div className={styles.categoryWrapper}>
+                    <div className={styles.categoryItem}>
+                        <div className={styles.categoryRectangle}><span>Institute</span></div>
+                    </div>
+                    <div className={styles.categoryItem}>
+                        <div className={styles.categoryRectangle}><span>University</span></div>
+                    </div>
+                    <div className={styles.categoryItem}>
+                        <div className={styles.categoryRectangle}>  <span>High School</span></div>
+                    </div>
+                    <div className={styles.categoryItem}>
+                        <div className={styles.categoryRectangle}> <span>Junior High School</span></div>
+                    </div>
+                </div>
+                <div className={styles.greenBox}> <span className={styles.categoriesLabel}>Categories</span></div>
             </section>
             <section id="All-Notes" className={styles.hotNotesContainer}>
                 <h1>All Notes</h1>

@@ -11,7 +11,7 @@
 
 .cardContainer {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     grid-gap: 20px;
     padding:20px;
     justify-items: center;
@@ -36,4 +36,60 @@
 }
 .cardlinks:hover{
     color: #FFFFFF;
+}
+.categoriesSection {
+    padding:20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+  
+.categoryWrapper {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    align-items: right;
+}
+  
+.categoryItem {
+    display: flex;
+    position: relative;
+    cursor: pointer;
+    left: -20px;
+}
+.categoryItem:not(:last-child) {
+    padding-bottom: 20px;
+}
+  
+.categoryRectangle {
+    width: 30vw;
+    height: auto;
+    background-color:#B3CAB9;
+    transition: width 0.5s ease-in-out;
+}
+  
+.categoryItem:hover .categoryRectangle {
+    width: 50vw;
+    color: #FFFFFF;
+}
+
+.categoryItem span {
+    margin-left: 10px;
+    align-items: right;
+    text-align: right;
+    font-size: 40px;
+}
+  
+.greenBox {
+    width: 50vw;
+    height: auto;
+    background-color: #B3CAB9;
+    position: relative;
+    right: -20px;
+}
+
+.categoriesLabel {
+    margin-left: 10px;
+    font-size: 40px;
+    justify-content: center;
 }

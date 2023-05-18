@@ -2,28 +2,31 @@
 .container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 .productContainer{
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: left;
     margin: 20px;
 }
 
 .carouselContainer {
-    position: relative;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-
+    justify-content: space-around;
 }
 
 .carousel {
-    width: 500px; /* Change this to the desired width */
-    height: 500px; /* Change this to the desired height */
-  }
+  width: 30vw;
+  height: 30vw;
+  transition: transform 0.5s ease-in-out;
+  transform: translateX(0);
+}
+
+.carousel_move{
+  transform: translateX(-30%);
+}
 
 .buttonGroup {
     display: grid;
@@ -57,5 +60,76 @@
     flex-basis: 45%;
 }
 
-
+@keyframes rotate {
+    from {
+      transform: rotateY(0deg);
+    }
+    to {
+      transform: rotateY(180deg);
+    }
+  }
   
+.rotate {
+  animation: rotate 0.5s ease-out forwards;
+}
+
+.rotateBack {
+  display: inline-block;
+  animation: rotate 0.5s ease-out forwards;
+}
+
+.variantBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 20vw;
+  height: 30vw; /* 讓半圓形的高度是寬度的兩倍 */
+  padding: 20px;
+  background-color: transparent;
+  border: #343a40 solid 1px;
+  /* border-radius: 85% 0 0 85%; */
+  border-radius: 0;
+  transform: translateX(100%);
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  opacity: 0;
+}
+
+.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.buttonGroup .icon {
+  display: inline-block;
+  transition: transform 0.5s ease-in-out;
+}
+
+.buttonGroup .rotate {
+  transform: rotate(180deg);
+}
+
+.rotateButton {
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.box{
+  display: flex;
+  flex-direction: row;
+}
+
+.selector{
+  background-color: #fff;
+  border-radius: 0%;
+  padding: 5px;
+  margin: 5px;
+}
+
+.button{
+  background-color: #343a40;
+  border-color: transparent;
+  border-radius: 0;
+  padding: 5px;
+  margin: 5px;
+  width: 100%;
+}

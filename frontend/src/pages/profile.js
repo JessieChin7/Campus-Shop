@@ -4,7 +4,7 @@ import { getUserProfile } from '../services/api';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import styles from '../styles/Profile.module.css';
-
+import { message } from 'antd';
 const Profile = () => {
     const [user, setUser] = useState(null);
     const router = useRouter();
@@ -22,11 +22,13 @@ const Profile = () => {
                 if (response.status === 200) {
                     setUser(response.data.data);
                 } else {
-                    console.error('Failed to fetch user profile:', response);
+                    message.error('Failed to fetch user profile ', response);
+                    localStorage.removeItem('access_token');
                     router.push('/');
                 }
             } catch (error) {
-                console.error('Error fetching user profile:', error);
+                message.error('Error fetching user profile ', error);
+                localStorage.removeItem('access_token');
                 router.push('/');
             }
         };
