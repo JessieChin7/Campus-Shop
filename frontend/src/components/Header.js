@@ -1,18 +1,18 @@
 // components/Header.js
 import Link from 'next/link';
 import styles from '../styles/Header.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { signInUser, signUpUser } from '../services/api';
 import { useRouter } from 'next/router';
 import { message } from 'antd';
-
 const Header = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const role = 'user';
     const [isLogin, setIsLogin] = useState(true);
+    const [cartCount, setCartCount] = useState(0);
     const router = useRouter();
 
     const openModal = () => {
@@ -60,6 +60,17 @@ const Header = () => {
         }
     };
 
+    useEffect(() => {
+        const updateCartCount = () => {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            setCartCount(cart.reduce((sum, item) => sum + Number(item.qty), 0));
+        };
+
+        updateCartCount();
+        window.addEventListener('storage', updateCartCount);
+        return () => window.removeEventListener('storage', updateCartCount);
+    }, []);
+
     return (<header className={styles.header}>
         <nav className={styles.menu}>
             <Link href="/" className={styles.logo}>
@@ -78,7 +89,12 @@ const Header = () => {
         <nav className={styles.rightHeader}>
             <input className={`form-control ${styles.search}`} type="search" placeholder="Search" aria-label="Search" />
             <button className={`bi bi-bookmark ${styles.icon}`}></button>
-            <button className={`bi bi-cart ${styles.icon}`}></button>
+            <Link href="/cart" className={styles.cart}>
+                <div className={styles.cart}>
+                    <button className={`bi bi-cart ${styles.icon}`}></button>
+                    <span className={styles.cartCount}>{cartCount}</span>
+                </div>
+            </Link>
             <button onClick={openModal} className={`bi bi-person ${styles.icon}`}></button>
             <Modal
                 isOpen={modalIsOpen}

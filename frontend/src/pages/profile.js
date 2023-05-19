@@ -39,6 +39,8 @@ const Profile = () => {
     const logout = () => {
         // remove the access token from local storage
         localStorage.removeItem('access_token');
+        // remove the cart from local storage
+        localStorage.removeItem('cart');
         // redirect to the home page
         router.push('/');
     };

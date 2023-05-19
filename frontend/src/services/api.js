@@ -68,4 +68,13 @@ export const deleteProduct = (id) => {
     return axiosInstance.delete(`/products/${id}`);
 };
 
-
+// Get shopee reviews
+export const getShopeeReviews = async (shopee_id) => {
+    try {
+        const response = await axiosInstance.get(`/products/shopee-reviews?itemid=${shopee_id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error during get shopee reviews:', error);
+        throw error;
+    }
+}

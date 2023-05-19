@@ -17,6 +17,17 @@
     justify-content: space-around;
 }
 
+.title{
+  font-size: 40px;
+  font-weight: bold;
+  margin: 20px;
+}
+
+.hashtag{
+  font-size: 14px;
+  margin-left: 20px;
+}
+
 .carousel {
   width: 30vw;
   height: 30vw;
@@ -25,7 +36,7 @@
 }
 
 .carousel_move{
-  transform: translateX(-30%);
+  transform: translateX(-20%);
 }
 
 .buttonGroup {
@@ -41,12 +52,13 @@
 }
 
 .roundButton {
-    width: 120px;
-    height: 120px;
+    width: 10vw;
+    height: 10vw;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: #E0DDC2 solid 1px;
 }
 
 
@@ -54,10 +66,12 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding: 20px;
 }
 
 .detail-column {
     flex-basis: 45%;
+    padding: 10px;
 }
 
 @keyframes rotate {
@@ -84,10 +98,10 @@
   align-items: center;
   justify-content: center;
   width: 20vw;
-  height: 30vw; /* 讓半圓形的高度是寬度的兩倍 */
+  height: 30vw;
   padding: 20px;
   background-color: transparent;
-  border: #343a40 solid 1px;
+  border: #E0DDC2 solid 1px;
   /* border-radius: 85% 0 0 85%; */
   border-radius: 0;
   transform: translateX(100%);
@@ -96,7 +110,7 @@
 }
 
 .show {
-  transform: translateX(0);
+  transform: translateX(-20%);
   opacity: 1;
 }
 
@@ -126,10 +140,42 @@
 }
 
 .button{
-  background-color: #343a40;
+  background-color: #E0DDC2;
+  color: #343a40;
   border-color: transparent;
   border-radius: 0;
   padding: 5px;
   margin: 5px;
   width: 100%;
+}
+
+.review{
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
+  width: 40vw;
+  margin: 20px;
+  padding: 20px;
+  border: #E0DDC2 solid 1px;
+}
+
+.review_username{
+  font-weight: bold;
+  width: fit-content;
+  border-radius: 5px;
+  padding: 4px;
+  background-color: #B3CAB9;
+}
+
+.form_group {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.bi-chevron-down {
+  position: absolute;
+  right: 0px;
+  top: -20px;
 }

@@ -31,7 +31,6 @@ exports.getProductById = async (id) => {
     return product;
 };
 
-
 exports.getTopFiveProducts = async function () {
     const self = this;
     const query = `

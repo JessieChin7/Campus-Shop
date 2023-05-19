@@ -1,0 +1,60 @@
+import styles from '../styles/Cart.module.css';
+import { useEffect, useState } from 'react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import { Form, Button } from 'react-bootstrap';
+
+const Cart = () => {
+    const [cart, setCart] = useState([]);
+
+    const handleRemove = (index) => {
+        const newCart = [...cart];
+        newCart.splice(index, 1);
+        setCart(newCart);
+        localStorage.setItem('cart', JSON.stringify(newCart));
+        window.dispatchEvent(new Event('storage'));
+    };
+
+    const handleQtyChange = (index, newQty) => {
+        const newCart = [...cart];
+        newCart[index].qty = newQty;
+        setCart(newCart);
+        localStorage.setItem('cart', JSON.stringify(newCart));
+        window.dispatchEvent(new Event('storage'));
+    };
+
+    useEffect(() => {
+        const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
+        setCart(storedCart);
+    }, []);
+
+    return (
+        <div className={styles.container}>
+            <Header />
+            <div className={styles.CartContainer}>
+                <h1>Shopping Cart</h1>
+                {cart.length === 0 && <p>Your cart is empty</p>}
+                {cart.map((item, index) => (
+                    <div key={index} className={styles.cartItem}>
+                        <img src={item.image} alt={item.name} className={styles.cartItemImage} />
+                        <h2 className={styles.cartItemName}>{item.name}</h2>
+                        <p>Version: {item.version}</p>
+                        <p>Part: {item.part}</p>
+                        <Form.Control
+                            className={styles.qtyInput}
+                            placeholder="Qty"
+                            type="number"
+                            min="1"
+                            value={item.qty}
+                            onChange={(e) => handleQtyChange(index, e.target.value)}
+                        />
+                        <Button variant="danger" onClick={() => handleRemove(index)} className={`bi bi-x ${styles.removeButton}`}></Button>
+                    </div>
+                ))}
+            </div>
+            <Footer />
+        </div>
+    );
+};
+
+export default Cart;

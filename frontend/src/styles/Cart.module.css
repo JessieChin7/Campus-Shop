@@ -1,0 +1,99 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.button{
+  width: auto;
+  background-color: #B3CAB9;
+  border: none;
+  color: #000;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border-radius: 0px;
+  cursor: pointer;
+}
+
+.input{
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 0px;
+  background-color: #E0DDC2;
+  color: #000;
+  font-size: 16px;
+}
+
+.buttonGroup{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 20px;
+  gap: 2%;
+}
+
+.inputGroup{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: left;
+  padding: 10px 20px;
+  gap: 2%;
+}
+
+.CartContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  gap: 2%;
+}
+
+.cartItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 60vw;
+  gap: 20px;
+  border: 0px solid #ccc;
+  padding: 20px;
+  border-radius: 0px;
+  background-color: #B3CAB9;
+  margin-bottom: 20px;
+}
+
+.cartItemImage {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.cartItemName {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.qtyInput{
+  border-radius: 0%;
+  width: fit-content;
+}
+
+.removeButton{
+  font-size: 24px;
+  border-radius: 0%;;
+  width: fit-content;
+  background-color: transparent;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.icon:hover {
+  cursor: pointer;
+  color: #FFFFFF;
+}
