@@ -43,7 +43,7 @@ exports.getTopFiveProducts = async function () {
     LIMIT 5
     `;
     const result = await pool.query(query);
-    return result.length > 0 ? result[0] : await self.getProductsByIdDesc();
+    return result.length > 0 ? result : await self.getProductsByIdDesc();
 };
 
 exports.getProductsByIdDesc = async () => {

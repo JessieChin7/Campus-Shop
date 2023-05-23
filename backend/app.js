@@ -5,7 +5,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var productsRouter = require('./routes/products');
 var userRouter = require('./routes/user');
-// var orderRouter = require('./routes/order');
+var orderRouter = require('./routes/order');
 var app = express();
 const cors = require('cors');
 var http = require('http');
@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/products', productsRouter);
 app.use('/user', userRouter);
-// app.use('/order', orderRouter);
+app.use('/order', orderRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 // catch 404 and forward to error handler

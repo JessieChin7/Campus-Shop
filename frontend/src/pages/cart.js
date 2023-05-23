@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Form, Button } from 'react-bootstrap';
-
+import { createOrder } from '../services/api';
 const Cart = () => {
     const [cart, setCart] = useState([]);
 
@@ -21,6 +21,33 @@ const Cart = () => {
         setCart(newCart);
         localStorage.setItem('cart', JSON.stringify(newCart));
         window.dispatchEvent(new Event('storage'));
+    };
+
+    const handleCheckout = async () => {
+        try {
+            const response = await createOrder({
+                items: cart,
+                total: cart.reduce((total, item) => total + item.price * item.qty, 0),
+                payment: 'paypal',
+                user_id: localStorage.getItem('user_id'),
+            });
+            console.log({
+                items: cart,
+                total: cart.reduce((total, item) => total + item.price * item.qty, 0),
+                payment: 'paypal',
+                user_id: localStorage.getItem('user_id'),
+            });
+            // Redirect to the PayPal checkout page
+            // Show chekcout success message
+            alert('Checkout success');
+            // Clear the cart
+            localStorage.setItem('cart', JSON.stringify([]));
+            window.dispatchEvent(new Event('storage'));
+            // reload the page
+            window.location.reload();
+        } catch (error) {
+            console.error('Error during checkout:', error);
+        }
     };
 
     useEffect(() => {
@@ -51,6 +78,10 @@ const Cart = () => {
                         <Button variant="danger" onClick={() => handleRemove(index)} className={`bi bi-x ${styles.removeButton}`}></Button>
                     </div>
                 ))}
+            </div>
+            <div className={styles.checkoutSection}>
+                <h2>Total: ${cart.reduce((total, item) => total + item.price * item.qty, 0)}</h2>
+                <Button variant="success" onClick={handleCheckout}>Checkout</Button>
             </div>
             <Footer />
         </div>

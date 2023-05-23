@@ -15,6 +15,7 @@ export const signInUser = async (userData) => {
         const response = await axiosInstance.post('/user/signin', userData);
         if (response.status === 200) {
             localStorage.setItem('access_token', response.data.data.access_token);
+            localStorage.setItem('user_id', response.data.data.user.id);
         }
         return response;
     } catch (error) {
@@ -78,3 +79,18 @@ export const getShopeeReviews = async (shopee_id) => {
         throw error;
     }
 }
+
+// Create a new order
+export const createOrder = (orderData) => {
+    return axiosInstance.post('/order/create', orderData);
+};
+
+
+export const updateOrderStatus = (orderId, status) => {
+    return axiosInstance.post(`/order/update/${orderId}`, { status });
+};
+
+// Get orders by order ID
+export const getOrderById = (orderId) => {
+    return axiosInstance.get(`/order/detail?orderId=${orderId}`);
+};

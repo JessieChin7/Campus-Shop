@@ -30,6 +30,12 @@ const ProductPage = () => {
             alert("Please select version, part and quantity before adding to cart");
             return;
         }
+        const variantKey = `${selectedVersion}_${selectedPart}`;
+        const variant = product.variants.find(v => `${v.version}_${v.part}` === variantKey);
+        if (!variant) {
+            alert("Invalid version or part selected");
+            return;
+        }
         // Add the product to the cart
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
         cart.push({
@@ -37,8 +43,10 @@ const ProductPage = () => {
             version: selectedVersion,
             part: selectedPart,
             qty: selectedQty,
+            price: product.price,
             name: product.title,
-            image: product.main_image
+            image: product.main_image,
+            variant_id: variant.id
         });
         localStorage.setItem('cart', JSON.stringify(cart));
         // Trigger the storage event to update the cart in the header
