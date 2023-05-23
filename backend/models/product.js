@@ -3,7 +3,7 @@ const util = require('util');
 pool.query = util.promisify(pool.query);
 
 exports.getAllProducts = async function () {
-    const rows = await pool.query('SELECT * FROM CampusShop.Product');
+    const rows = await pool.query('SELECT * FROM CampusShop.Product WHERE status = "show"');
     return rows;
 };
 
@@ -31,6 +31,12 @@ exports.getProductById = async (id) => {
     return product;
 };
 
+exports.getVariantById = async function (variant_id) {
+    const query = 'SELECT * FROM CampusShop.Variant WHERE id = ?';
+    const result = await pool.query(query, [variant_id]);
+    return result;
+};
+
 exports.getTopFiveProducts = async function () {
     const self = this;
     const query = `
@@ -38,6 +44,7 @@ exports.getTopFiveProducts = async function () {
     FROM CampusShop.Product p
     JOIN CampusShop.Variant v ON p.id = v.product_id
     JOIN CampusShop.OrderItem oi ON v.id = oi.variant_id
+    WHERE p.status = 'show'
     GROUP BY p.id
     ORDER BY total_qty DESC
     LIMIT 5
@@ -71,11 +78,31 @@ exports.createProduct = function (product) {
     });
 }
 
-exports.updateProduct = async (id, productData) => {
-    const { category, title, description, hashtag, price, note, author, main_image, images, catalog } = productData;
-    const [result] = await pool.query('UPDATE CampusShop.Product SET category = ?, title = ?, description = ?, hashtag = ?, price = ?, note = ?, author = ?, main_image = ?, images = ?, catalog = ? WHERE id = ?', [category, title, description, hashtag, price, note, author, main_image, images, catalog, id]);
+exports.updateProduct = async function (productId, updatedProduct) {
+    // Get the old product data first
+    const oldProductData = await this.getProductById(productId);
+    // Merge old data with updated data
+    const newProductData = { ...oldProductData, ...updatedProduct };
+    const { category, title, description, hashtag, price, note, author, main_image, images, catalog, file } = newProductData;
+    const imagesStr = JSON.stringify(images);
+    console.log(newProductData);
+    const query = "UPDATE CampusShop.Product SET category = ?, title = ?, description = ?, hashtag = ?, price = ?, note = ?, author = ?, main_image = ?, images = ?, catalog = ?, file = ? WHERE id = ?";
+    const params = [category, title, description, hashtag, price, note, author, main_image, imagesStr, catalog, file, productId];
+    const result = await pool.query(query, params);
     return result;
-};
+}
+
+exports.updateVariant = async function (variant) {
+    // Get the old variant data first
+    const oldVariantData = await this.getVariantById(variant.id); // Assuming this method exists
+    // Merge old data with updated data
+    const newVariantData = { ...oldVariantData, ...variant };
+    const { version, stock, product_id, part, id } = newVariantData;
+    const query = 'UPDATE CampusShop.Variant SET version = ?, stock = ?, product_id = ?, part = ? WHERE id = ?';
+    const params = [version, stock, product_id, part, id];
+    const result = await pool.query(query, params);
+    return result;
+}
 
 exports.deleteProduct = async (id) => {
     const [result] = await pool.query('DELETE FROM CampusShop.Product WHERE id = ?', [id]);
@@ -85,13 +112,6 @@ exports.deleteProduct = async (id) => {
 exports.createVariant = async function (variant) {
     const { version, stock, product_id, part } = variant;
     const queryResult = await pool.query('INSERT INTO CampusShop.Variant (version, stock, product_id, part) VALUES (?, ?, ?, ?)', [version, stock, product_id, part]);
-    const result = queryResult.insertId;
-    return result;
-};
-
-exports.updateVariant = async (id, variantData) => {
-    const { version, stock, product_id, part } = variantData;
-    const queryResult = await pool.query('UPDATE CampusShop.Variant SET version = ?, stock = ?, product_id = ?, part = ? WHERE id = ?', [version, stock, product_id, part, id]);
     const result = queryResult.insertId;
     return result;
 };

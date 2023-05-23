@@ -34,6 +34,8 @@ const upload = multer({
         folderName = 'CampusShop_main_image';
       } else if (file.fieldname === 'images') {
         folderName = 'CampusShop_images';
+      } else if (file.fieldname === 'file') {
+        folderName = 'CampusShop_files';
       } else {
         return cb(new Error('Invalid fieldname'));
       }
@@ -77,32 +79,69 @@ router.get('/category', async function (req, res) {
   res.json(products);
 });
 
-router.post('/', upload.fields([{ name: 'main_image', maxCount: 1 }, { name: 'images', maxCount: 5 }]), validateProduct, async function (req, res) {
-  const newProduct = req.body;
-  newProduct.main_image = req.files.main_image ? req.files.main_image[0].location : null;
-  newProduct.images = req.files.images ? req.files.images.map(file => file.location) : [];
-  const productId = await productModel.createProduct(newProduct);
-  for (const variant of newProduct.variants) {
-    variant.product_id = productId;
-    await productModel.createVariant(variant);
-  }
-  res.status(200).json({ newProduct: newProduct });
-});
-
-router.put('/:id', validateProduct, async function (req, res) {
-  const updatedProduct = req.body;
-  if (updatedProduct.price) updatedProduct.price = Number(updatedProduct.price);
-  const result = await productModel.updateProduct(req.params.id, updatedProduct);
-  updatedProduct.variants.forEach(async variant => {
-    if (variant.id) {
-      await productModel.updateVariant(variant.id, variant);
-    } else {
-      variant.product_id = req.params.id;
+router.post('/',
+  upload.fields([
+    { name: 'main_image', maxCount: 1 },
+    { name: 'images', maxCount: 5 },
+    { name: 'file', maxCount: 1 } // 新增的欄位，用來處理 PDF 檔案
+  ]),
+  validateProduct,
+  async function (req, res) {
+    const newProduct = req.body;
+    newProduct.main_image = req.files.main_image ? req.files.main_image[0].location : null;
+    newProduct.images = req.files.images ? req.files.images.map(file => file.location) : [];
+    newProduct.file = req.files.file ? req.files.file[0].location : null; // 將 PDF 檔案的路徑存入資料庫
+    const productId = await productModel.createProduct(newProduct);
+    for (const variant of newProduct.variants) {
+      variant.product_id = productId;
       await productModel.createVariant(variant);
     }
+    res.status(200).json({ newProduct: newProduct });
   });
-  res.json(result);
-});
+
+
+router.put('/',
+  async function (req, res, next) {
+    const productId = req.query.id;
+    const updatedProduct = req.body;
+    const product = await productModel.getProductById(productId);
+
+    if (!product) {
+      return res.status(404).send({ message: "Product not found" });
+    }
+
+    // Store old file paths into updatedProduct
+    updatedProduct.main_image = product.main_image;
+    updatedProduct.images = product.images;
+    updatedProduct.file = product.file;
+
+    next();
+  },
+  upload.fields([
+    { name: 'main_image', maxCount: 1 },
+    { name: 'images', maxCount: 5 },
+    { name: 'file', maxCount: 1 }
+  ]),
+  async function (req, res) {
+    const productId = req.query.id;
+    const updatedProduct = req.body;
+
+    // Overwrite old file paths if new files are uploaded
+    updatedProduct.main_image = req.files.main_image ? req.files.main_image[0].location : updatedProduct.main_image;
+    updatedProduct.images = req.files.images ? req.files.images.map(file => file.location) : updatedProduct.images;
+    updatedProduct.file = req.files.file ? req.files.file[0].location : updatedProduct.file;
+
+    await productModel.updateProduct(productId, updatedProduct);
+
+    if (updatedProduct.variants) {
+      for (const variant of updatedProduct.variants) {
+        variant.product_id = productId;
+        await productModel.updateVariant(variant);
+      }
+    }
+
+    res.status(200).json({ updatedProduct: updatedProduct });
+  });
 
 router.delete('/:id', async function (req, res) {
   const result = await productModel.deleteProduct(req.params.id);

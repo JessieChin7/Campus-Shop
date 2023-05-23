@@ -24,6 +24,11 @@ const Cart = () => {
     };
 
     const handleCheckout = async () => {
+        // check token
+        if (!localStorage.getItem('access_token')) {
+            alert('Please sign in to checkout');
+            return;
+        }
         try {
             const response = await createOrder({
                 items: cart,

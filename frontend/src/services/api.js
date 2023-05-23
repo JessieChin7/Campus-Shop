@@ -26,10 +26,9 @@ export const signInUser = async (userData) => {
 
 // User Profile API
 export const getUserProfile = (token) => {
-    console.log(token);
     return axiosInstance.get('/user/profile', {
         headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
     });
 };
@@ -56,7 +55,13 @@ export const getProductsByCategory = (category) => {
 
 // Create a new product
 export const createProduct = (productData, config) => {
-    return axiosInstance.post('/products', productData, config);
+    // return axiosInstance.post('/products', productData, config);
+    return axiosInstance.post('/products', productData, {
+        headers: {
+            // add multi-part form data header
+            'Content-Type': 'multipart/form-data',
+        }
+    });
 };
 
 // Update a product
@@ -82,9 +87,12 @@ export const getShopeeReviews = async (shopee_id) => {
 
 // Create a new order
 export const createOrder = (orderData) => {
-    return axiosInstance.post('/order/create', orderData);
+    return axiosInstance.post('/order/create', orderData, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+    });
 };
-
 
 export const updateOrderStatus = (orderId, status) => {
     return axiosInstance.post(`/order/update/${orderId}`, { status });
