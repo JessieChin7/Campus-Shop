@@ -1,7 +1,7 @@
 // service/api.js
 import axios from "axios";
 
-const API_HOSTNAME = `http://${process.env.API_SERVER}`;
+const API_HOSTNAME = process.env.API_SERVER;
 const axiosInstance = axios.create({
     baseURL: API_HOSTNAME,
 });
