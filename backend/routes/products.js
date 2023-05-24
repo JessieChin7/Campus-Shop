@@ -99,7 +99,6 @@ router.post('/',
     res.status(200).json({ newProduct: newProduct });
   });
 
-
 router.put('/',
   async function (req, res, next) {
     const productId = req.query.id;

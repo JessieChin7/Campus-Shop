@@ -55,7 +55,6 @@ export const getProductsByCategory = (category) => {
 
 // Create a new product
 export const createProduct = (productData, config) => {
-    // return axiosInstance.post('/products', productData, config);
     return axiosInstance.post('/products', productData, {
         headers: {
             // add multi-part form data header
