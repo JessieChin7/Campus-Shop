@@ -2,6 +2,47 @@ const express = require('express');
 const router = express.Router();
 const orderModel = require('../models/order');
 const paymentProcessor = require('../paymentProcessor');
+const jwt = require('jsonwebtoken');
+
+// JWT middleware for admin authorization
+const verifyAdmin = (req, res, next) => {
+    const token = req.headers.authorization.split(' ')[1];
+    if (!token) {
+        return res.status(403).json({ message: 'No token provided.' });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ message: 'Failed to authenticate token.' });
+        }
+
+        if (decoded.role !== 'admin') {
+            return res.status(403).json({ message: 'You must be an admin to perform this action.' });
+        }
+
+        next();
+    });
+};
+
+router.get('/all', verifyAdmin, async (req, res) => {
+    try {
+        const orders = await orderModel.getAllOrders();
+        res.status(200).json(orders);
+    } catch (error) {
+        res.status(500).json({ message: 'Error getting all orders' });
+    }
+});
+
+router.get('/user', async (req, res) => {
+    let id = req.query.id;
+    try {
+        const orders = await orderModel.getOrdersByUserId(id);
+        res.status(200).json(orders);
+    } catch (error) {
+        res.status(500).json({ message: 'Error getting orders for user' });
+    }
+});
 
 
 router.post('/create', async (req, res) => {
@@ -17,7 +58,6 @@ router.post('/create', async (req, res) => {
         res.status(500).json({ message: 'Error creating order' });
     }
 });
-
 
 router.post('/confirm/:orderId', async (req, res) => {
     const orderId = req.params.orderId;
@@ -43,5 +83,7 @@ router.get('/detail', async (req, res) => {
         res.status(500).json({ message: 'Error getting order' });
     }
 });
+
+
 
 module.exports = router;

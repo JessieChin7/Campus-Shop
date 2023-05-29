@@ -121,3 +121,8 @@ exports.deleteVariant = async (id) => {
     const result = queryResult.insertId;
     return result;
 };
+
+exports.searchProducts = async (keyword) => {
+    const productRows = await pool.query(`SELECT * FROM CampusShop.Product WHERE title LIKE ?`, ['%' + keyword + '%']);
+    return productRows;
+};

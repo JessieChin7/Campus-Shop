@@ -153,6 +153,15 @@ router.get('/all', async function (req, res) {
   res.json(products);
 });
 
+router.get('/search', async (req, res) => {
+  const keyword = req.query.keyword;
+  try {
+    const products = await productModel.searchProducts(keyword);
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: 'Error searching products' });
+  }
+});
 
 //comments
 

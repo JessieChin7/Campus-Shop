@@ -101,3 +101,26 @@ export const updateOrderStatus = (orderId, status) => {
 export const getOrderById = (orderId) => {
     return axiosInstance.get(`/order/detail?orderId=${orderId}`);
 };
+
+// Search products
+export const getSearchResults = (keyword) => {
+    return axiosInstance.get(`/products/search?keyword=${keyword}`);
+};
+
+// Get all Orders
+export const getAllOrders = () => {
+    return axiosInstance.get('/order/all', {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+    });
+}
+
+// Get self Orders
+export const getSelfOrders = (id) => {
+    return axiosInstance.get(`/order/user?id=${id}`, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+    });
+}

@@ -1,0 +1,22 @@
+/* styles/ProductCard.module.css */
+.card {
+    width: 240px;
+    background-color: #E0DDC2;
+    border-radius: 0%;
+    border-width: 0px;
+    text-align: left;
+    margin: 20px;
+    /* shadow */
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+}
+.cardImage {
+    padding:0px;
+    height: auto;
+    border-radius: 0%;
+    align-self: center;
+    object-fit: cover;
+}
+.cardlinks{
+    text-decoration: none; 
+    color: black;
+}

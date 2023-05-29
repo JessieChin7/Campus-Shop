@@ -23,5 +23,13 @@ module.exports = {
             order.orderItems = orderItemsRows;
         }
         return order;
-    }
+    },
+    async getAllOrders() {
+        const ordersRows = await pool.query(`SELECT * FROM CampusShop.Order`);
+        return ordersRows;
+    },
+    async getOrdersByUserId(user_id) {
+        const ordersRows = await pool.query(`SELECT * FROM CampusShop.Order WHERE user_id = ?`, [user_id]);
+        return ordersRows;
+    },
 };
