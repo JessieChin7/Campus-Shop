@@ -6,7 +6,7 @@ import styles from '../styles/ProductCard.module.css';
 const ProductCard = ({ product }) => (
     <Link href={`/products/${product.id}`} className={styles.cardlinks}>
         <Card className={styles.card}>
-            <Card.Img className={styles.cardImage} variant="top" src={product.main_image} />
+            <Card.Img className={styles.cardImage} variant="top" src={product.main_image} alt={product.title} />
             <Card.Body>
                 <Card.Title>{product.title}</Card.Title>
                 <Card.Text>

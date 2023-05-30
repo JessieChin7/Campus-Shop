@@ -1,7 +1,8 @@
 /* styles/ProductCard.module.css */
 .card {
     width: 240px;
-    background-color: #E0DDC2;
+    /* background-color: #E0DDC2; */
+    background-color: #B3CAB9;
     border-radius: 0%;
     border-width: 0px;
     text-align: left;

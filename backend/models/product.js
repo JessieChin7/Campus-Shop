@@ -126,3 +126,9 @@ exports.searchProducts = async (keyword) => {
     const productRows = await pool.query(`SELECT * FROM CampusShop.Product WHERE title LIKE ?`, ['%' + keyword + '%']);
     return productRows;
 };
+
+exports.getProductByVariantId = async function (variant_id) {
+    const query = 'SELECT * FROM CampusShop.Product WHERE id = (SELECT product_id FROM CampusShop.Variant WHERE id = ?)';
+    const result = await pool.query(query, [variant_id]);
+    return result;
+};

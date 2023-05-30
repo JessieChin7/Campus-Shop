@@ -230,8 +230,10 @@ router.get('/download-pdf', async (req, res) => {
     pages.forEach(page => {
       const { width, height } = page.getSize();
       positions.forEach(position => {
+        const textWidth = watermarkSize * watermarkText.length;
+        const x = (width - textWidth) / 2;
         page.drawText(watermarkText, {
-          x: width / 2 - (watermarkSize * watermarkText.length / 2),
+          x: x,
           y: height * position,
           size: watermarkSize,
           font: watermark,
@@ -269,4 +271,78 @@ router.get('/download-pdf', async (req, res) => {
   }
 });
 
-module.exports = router;
+router.get('/product-by-variant', async function (req, res) {
+  let variant_id = req.query.variant_id;
+  const product = await productModel.getProductByVariantId(variant_id);
+  res.json(product);
+});
+
+
+const generateDownloadUrl = async function (product_id, user_id, order_id, completed_date) {
+  console.log(`Generating download URL for product ${product_id}, user ${user_id}, order ${order_id}, completed date ${completed_date}`);
+  const product = await productModel.getProductById(product_id);
+  const pdfUrl = product.file;
+
+  const response = await axios.get(pdfUrl, {
+    responseType: 'arraybuffer',
+    maxContentLength: Infinity,
+    maxBodyLength: Infinity
+  });
+
+  const pdfBuffer = response.data;
+  const pdfDoc = await PDFDocument.load(pdfBuffer);
+  const pages = pdfDoc.getPages();
+  const firstPage = pages[0];
+  const { width, height } = firstPage.getSize();
+
+  const watermarkText = `User ID: ${user_id}, Order ID: ${order_id}, Completed Date: ${completed_date}`;
+  const watermark = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const watermarkSize = 20;
+  const watermarkColor = rgb(0.95, 0.95, 0.95);
+  const positions = [0.25, 0.5, 0.75];
+
+  pages.forEach(page => {
+    const { width, height } = page.getSize();
+    positions.forEach(position => {
+      const textWidth = watermarkSize * watermarkText.length;
+      const x = (width) / 2;
+      page.drawText(watermarkText, {
+        x: x,
+        y: height * position,
+        size: watermarkSize,
+        font: watermark,
+        color: watermarkColor,
+        opacity: 0,
+      });
+    });
+  });
+
+  const pdfBytes = await pdfDoc.save();
+
+  const key = `client_buffer/${product_id}_${user_id}_${order_id}_${completed_date}.pdf`;
+  const uploadParams = {
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Key: key,
+    Body: pdfBytes,
+    ContentType: 'application/pdf',
+    ContentLength: pdfBytes.length
+  };
+
+  const command = new PutObjectCommand(uploadParams);
+  await s3.send(command);
+
+  // Generate presigned URL
+  const url = await getSignedUrl(s3, new GetObjectCommand({
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Key: key
+  }), { expiresIn: 3600 });  // 1 hour
+
+  return url;
+}
+
+
+module.exports = {
+  router,
+  generateDownloadUrl
+};
+

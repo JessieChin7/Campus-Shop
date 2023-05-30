@@ -124,3 +124,17 @@ export const getSelfOrders = (id) => {
         }
     });
 }
+
+export const getProductByVariantId = (variantId) => {
+    return axiosInstance.get(`/products/product-by-variant?variant_id=${variantId}`);
+};
+// Confirm order payment
+export const confirmOrderPayment = (orderId) => {
+    return axiosInstance.post('/order/confirm', { orderId });
+};
+
+// Mark order item as downloaded
+export const markOrderItemAsDownloaded = (orderId, variantId) => {
+    return axiosInstance.post('/order/downloaded', { orderId, variantId });
+};
+
