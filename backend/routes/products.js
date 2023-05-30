@@ -3,11 +3,17 @@ const router = express.Router();
 const productModel = require('../models/product');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
-const { S3Client, PutObjectCommand, ListObjectsV2Command } = require('@aws-sdk/client-s3');
+const { S3Client, PutObjectCommand, GetObjectCommand, ListObjectsV2Command } = require('@aws-sdk/client-s3');
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const REGION = process.env.AWS_REGION;
 const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
 const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
+
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+
 
 const s3 = new S3Client({
   region: REGION,
@@ -187,6 +193,80 @@ router.get('/shopee-reviews', async function (req, res) {
   const url = `https://shopee.tw/api/v2/item/get_ratings?filter=1&flag=1&itemid=${req.query.itemid}&limit=50&offset=0&shopid=7461532&type=5`;
   const reviews = await getShopeeReviews(url);
   res.json(reviews);
+});
+
+
+// files
+router.get('/download-pdf', async (req, res) => {
+  const { product_id, user_id, order_id, completed_date } = req.query;
+
+  if (!product_id || !user_id || !order_id || !completed_date) {
+    return res.status(400).json({ message: 'Missing required parameters: product_id, user_id, order_id, completed_date.' });
+  }
+
+  try {
+    const product = await productModel.getProductById(product_id);
+    const pdfUrl = product.file;
+
+    const response = await axios.get(pdfUrl, {
+      responseType: 'arraybuffer',
+      maxContentLength: Infinity,
+      maxBodyLength: Infinity
+    });
+    const pdfBuffer = response.data;
+
+    const pdfDoc = await PDFDocument.load(pdfBuffer);
+    const pages = pdfDoc.getPages();
+    const firstPage = pages[0];
+    const { width, height } = firstPage.getSize();
+
+    const watermarkText = `User ID: ${user_id}, Order ID: ${order_id}, Completed Date: ${completed_date}`;
+    const watermark = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    // Transparent watermark on every page
+    const watermarkSize = 12;
+    const watermarkColor = rgb(0.95, 0.95, 0.95); // Very light gray, almost white
+    const positions = [0.25, 0.5, 0.75]; // Upper, middle and lower part of the page
+
+    pages.forEach(page => {
+      const { width, height } = page.getSize();
+      positions.forEach(position => {
+        page.drawText(watermarkText, {
+          x: width / 2 - (watermarkSize * watermarkText.length / 2),
+          y: height * position,
+          size: watermarkSize,
+          font: watermark,
+          color: watermarkColor,
+          opacity: 0,
+        });
+      });
+    });
+
+
+    const pdfBytes = await pdfDoc.save();
+
+    const key = `client_buffer/${product_id}_${user_id}_${order_id}_${completed_date}.pdf`;
+    const uploadParams = {
+      Bucket: process.env.AWS_S3_BUCKET_NAME,
+      Key: key,
+      Body: pdfBytes,
+      ContentType: 'application/pdf',
+      ContentLength: pdfBytes.length
+    };
+
+    const command = new PutObjectCommand(uploadParams);
+    await s3.send(command);
+
+    // Generate presigned URL
+    const url = await getSignedUrl(s3, new GetObjectCommand({
+      Bucket: process.env.AWS_S3_BUCKET_NAME,
+      Key: key
+    }), { expiresIn: 3600 });  // 1 hour
+
+    res.status(200).json({ download_url: url });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error getting PDF file' });
+  }
 });
 
 module.exports = router;
