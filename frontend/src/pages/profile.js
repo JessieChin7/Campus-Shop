@@ -117,7 +117,7 @@ const Profile = () => {
                         {order.orderItems.map(orderItem => (
                             // set array index as key
                             <div key={orderItem.index}>
-                                <p>Product Name: {orderItem.product[0].title}</p>
+                                <p>{orderItem.product[0].title}</p>
                                 <img src={orderItem.product[0].main_image} alt={orderItem.title} className={styles.orderItemImage} />
                                 <p>Quantity: {orderItem.qty}</p>
                                 {order.status === 'paid' && orderItem.status !== 'downloaded' && (
