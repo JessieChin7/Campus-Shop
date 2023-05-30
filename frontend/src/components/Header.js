@@ -14,6 +14,7 @@ const Header = () => {
     const [isLogin, setIsLogin] = useState(true);
     const [cartCount, setCartCount] = useState(0);
     const router = useRouter();
+    const [searchTerm, setSearchTerm] = useState('');
 
     const openModal = () => {
         const token = localStorage.getItem('access_token');
@@ -60,6 +61,11 @@ const Header = () => {
         }
     };
 
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        router.push(`/search?keyword=${searchTerm}`);
+    };
+
     useEffect(() => {
         const updateCartCount = () => {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -87,7 +93,16 @@ const Header = () => {
             </Link>
         </nav>
         <nav className={styles.rightHeader}>
-            <input className={`form-control ${styles.search}`} type="search" placeholder="Search" aria-label="Search" />
+            <form onSubmit={handleSearchSubmit}>
+                <input
+                    className={`form-control ${styles.search}`}
+                    type="search"
+                    placeholder="Search"
+                    aria-label="Search"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </form>
             <button className={`bi bi-bookmark ${styles.icon}`}></button>
             <Link href="/cart" className={styles.cart}>
                 <div className={styles.cart}>

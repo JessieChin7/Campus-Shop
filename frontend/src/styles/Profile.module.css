@@ -53,3 +53,23 @@
     padding: 10px 20px;
     gap: 2%;
   }
+  
+  .orderItem {
+    display: flex;
+    align-self: center;
+    align-items: center;
+    justify-content: left;
+    width: 100%;
+    gap: 20px;
+    border: 0px solid #ccc;
+    padding: 20px;
+    border-radius: 0px;
+    background-color: #B3CAB9;
+    margin-bottom: 20px;
+  }
+
+  .orderItemImage {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+  }

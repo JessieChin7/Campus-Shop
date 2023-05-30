@@ -11,6 +11,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import ProductCard from '../components/ProductCard';
 const HomePage = () => {
     const [topFiveProducts, setTopFiveProducts] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
@@ -20,7 +21,7 @@ const HomePage = () => {
         return (
             <div
                 className={className}
-                style={{ ...style, display: "block", color: "black" }}
+                style={{ ...style, display: "block", color: "black", fontSize: "2rem" }}
                 onClick={onClick}
             >
                 <FontAwesomeIcon icon={faChevronRight} />
@@ -33,7 +34,7 @@ const HomePage = () => {
         return (
             <div
                 className={className}
-                style={{ ...style, display: "block", color: "black" }}
+                style={{ ...style, display: "block", color: "black", fontSize: "2rem" }}
                 onClick={onClick}
             >
                 <FontAwesomeIcon icon={faChevronLeft} />
@@ -47,6 +48,7 @@ const HomePage = () => {
         speed: 500,
         slidesToShow: 5,
         slidesToScroll: 1,
+        autoplay: true,
         arrows: true,
         nextArrow: <SampleNextArrow />,
         prevArrow: <SamplePrevArrow />
@@ -64,19 +66,7 @@ const HomePage = () => {
                 <h1>Hot Notes</h1>
                 <Slider {...settings}>
                     {topFiveProducts.map(product => (
-                        <div key={product.id}>
-                            <Link href={`/products/${product.id}`} className={styles.cardlinks}>
-                                <Card className={styles.card}>
-                                    <Card.Img className={styles.cardImage} variant="top" src={product.main_image} />
-                                    <Card.Body>
-                                        <Card.Title>{product.title}</Card.Title>
-                                        <Card.Text>
-                                            NT$ {product.price}
-                                        </Card.Text>
-                                    </Card.Body>
-                                </Card>
-                            </Link>
-                        </div>
+                        <ProductCard key={product.id} product={product} />
                     ))}
                 </Slider>
             </section>
@@ -102,19 +92,7 @@ const HomePage = () => {
                 <div className={styles.cardContainer}>
                     <Slider {...settings}>
                         {allProducts.map(product => (
-                            <div key={product.id}>
-                                <Link href={`/products/${product.id}`} className={styles.cardlinks}>
-                                    <Card className={styles.card}>
-                                        <Card.Img className={styles.cardImage} variant="top" src={product.main_image} />
-                                        <Card.Body>
-                                            <Card.Title>{product.title}</Card.Title>
-                                            <Card.Text>
-                                                NT$ {product.price}
-                                            </Card.Text>
-                                        </Card.Body>
-                                    </Card>
-                                </Link>
-                            </div>
+                            <ProductCard key={product.id} product={product} />
                         ))}
                     </Slider>
                 </div>

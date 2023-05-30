@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.searchContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: left;
+    padding: 10px 20px;
+    gap: 2%;
+  }

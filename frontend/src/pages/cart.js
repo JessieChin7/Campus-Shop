@@ -68,7 +68,7 @@ const Cart = () => {
                 {cart.length === 0 && <p>Your cart is empty</p>}
                 {cart.map((item, index) => (
                     <div key={index} className={styles.cartItem}>
-                        <img src={item.image} alt={item.name} className={styles.cartItemImage} />
+                        <img src={item.image} alt={item.title} className={styles.cartItemImage} />
                         <h2 className={styles.cartItemName}>{item.name}</h2>
                         <p>Version: {item.version}</p>
                         <p>Part: {item.part}</p>

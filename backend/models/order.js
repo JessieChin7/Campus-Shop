@@ -9,7 +9,10 @@ module.exports = {
         return result.insertId;
     },
     async createOrderItem(order_id, variant_id, qty) {
-        await pool.query(`INSERT INTO CampusShop.OrderItem (order_id, variant_id, qty) VALUES(?, ?, ?)`, [order_id, variant_id, qty]);
+        await pool.query(`INSERT INTO CampusShop.OrderItem (order_id, variant_id, qty, status) VALUES(?, ?, ?,?)`, [order_id, variant_id, qty, 'undownloaded']);
+    },
+    async updateOrderItemStatus(order_id, variant_id, status) {
+        await pool.query(`UPDATE CampusShop.OrderItem SET status = ? WHERE order_id = ? AND variant_id = ?`, [status, order_id, variant_id]);
     },
     async updateOrderStatus(order_id, status) {
         await pool.query(`UPDATE CampusShop.Order SET status = ? WHERE id = ?`, [status, order_id]);
@@ -23,5 +26,28 @@ module.exports = {
             order.orderItems = orderItemsRows;
         }
         return order;
+    },
+    async getAllOrders() {
+        const ordersRows = await pool.query(`SELECT * FROM CampusShop.Order`);
+        for (let i = 0; i < ordersRows.length; i++) {
+            const orderItemsRows = await pool.query(`SELECT * FROM CampusShop.OrderItem WHERE order_id = ?`, [ordersRows[i].id]);
+            ordersRows[i].orderItems = orderItemsRows;
+        }
+        return ordersRows;
+    },
+
+    async getOrdersByUserId(user_id) {
+        const ordersRows = await pool.query(`SELECT * FROM CampusShop.Order WHERE user_id = ?`, [user_id]);
+        for (let i = 0; i < ordersRows.length; i++) {
+            const orderItemsRows = await pool.query(`SELECT * FROM CampusShop.OrderItem WHERE order_id = ?`, [ordersRows[i].id]);
+            ordersRows[i].orderItems = orderItemsRows;
+        }
+        return ordersRows;
+    },
+    async saveDownloadUrl(orderId, variantId, downloadUrl) {
+        const query = 'UPDATE CampusShop.OrderItem SET file = ? WHERE order_id = ? AND variant_id = ?';
+        const params = [downloadUrl, orderId, variantId];
+        const result = await pool.query(query, params);
+        return result;
     }
 };
