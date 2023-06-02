@@ -51,7 +51,8 @@ const HomePage = () => {
         autoplay: true,
         arrows: true,
         nextArrow: <SampleNextArrow />,
-        prevArrow: <SamplePrevArrow />
+        prevArrow: <SamplePrevArrow />,
+        centerMode: true,
     };
 
     useEffect(() => {
@@ -70,7 +71,7 @@ const HomePage = () => {
                     ))}
                 </Slider>
             </section>
-            <section id="Categories" className={styles.categoriesSection}>
+            {/* <section id="Categories" className={styles.categoriesSection}>
                 <div className={styles.categoryWrapper}>
                     <div className={styles.categoryItem}>
                         <div className={styles.categoryRectangle}><span>Institute</span></div>
@@ -86,7 +87,7 @@ const HomePage = () => {
                     </div>
                 </div>
                 <div className={styles.greenBox}> <span className={styles.categoriesLabel}>Categories</span></div>
-            </section>
+            </section> */}
             <section id="All-Notes" className={styles.hotNotesContainer}>
                 <h1>All Notes</h1>
                 <div className={styles.cardContainer}>

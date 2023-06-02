@@ -6,33 +6,20 @@
 
 .hotNotesContainer {
     position: relative;
-    text-align: center;
-    padding:20px;
-    margin-left: 60px;
-    margin-top: 100px;
+    align-items: center;
+    padding-left: 80px;
+    padding-right: 80px;
 }
 
 
 .hotNotesContainer h1 {
-    position: absolute;  
     font-size: 120px;
-    top: -100px;  
-    left: 40px;  
-    z-index: 0;  
 }
 
 .cardContainer {
-    /* display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-gap: 20px;
-    padding:20px;
     justify-items: center;
-    display: flex; 
-    overflow-x: auto; 
-    scrollbar-width: none; 
-    -ms-overflow-style: none; */
-    padding: 20px;
-    justify-items: center;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .card {
@@ -73,7 +60,7 @@
     display: flex;
     position: relative;
     cursor: pointer;
-    left: -20px;
+    /* left: -20px; */
 }
 .categoryItem:not(:last-child) {
     padding-bottom: 20px;
@@ -103,11 +90,10 @@
     height: auto;
     background-color: #B3CAB9;
     position: relative;
-    right: -20px;
 }
 
 .categoriesLabel {
-    margin-left: 10px;
+    /* margin-left: 10px; */
     font-size: 40px;
     justify-content: center;
 }
