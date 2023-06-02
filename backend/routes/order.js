@@ -63,7 +63,7 @@ router.post('/create', async (req, res) => {
 router.post('/confirm', async (req, res) => {
     const { orderId } = req.body;
     try {
-        await orderModel.updateOrderStatus(orderId, 'paid');
+        await orderModel.updateOrderStatus(orderId, 'processing');
         const order = await orderModel.getOrderById(orderId);
         const { user_id, orderItems } = order;
         for (let item of orderItems) {
@@ -75,10 +75,11 @@ router.post('/confirm', async (req, res) => {
             const completed_date = new Date().toISOString().slice(0, 19).replace('T', ' ');
             const downloadUrl = await generateDownloadUrl(id, user_id, orderId, completed_date);
             await orderModel.saveDownloadUrl(orderId, variant_id, downloadUrl);
+            await orderModel.updateOrderStatus(orderId, 'paid');
         }
         res.status(200).json({ message: 'Order payment confirmed' });
     } catch (error) {
-        console.error(error);
+        console.error('Error detail:', error);
         res.status(500).json({ message: 'Error confirming payment' });
     }
 });

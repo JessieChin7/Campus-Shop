@@ -152,21 +152,26 @@ const ProductPage = () => {
                 </div>
                 <div className={styles.details}>
                     <div className={styles.detailColumn}>
-                        <h2>Price: NT${product.price}</h2>
-                        <h2>Author: {product.author}</h2>
-                        <p>{product.description}</p>
-                        <p>{product.note}</p>
-                        <p>{product.catalog}</p>
+                        <h2>💰全套價格: NT${product.price}</h2>
+                        <h2>👩🏻‍🎓筆記作者: {product.author}</h2>
+                        <h2>✨筆記特色</h2>
+                        <p className={styles.detail}>{product.description}</p>
+                        <h2>🔔注意事項</h2>
+                        <p className={styles.detail}>{product.note}</p>
+                        <h2>🗃️主題目錄</h2>
+                        <p className={styles.detail}>{product.catalog}</p>
                     </div>
                     <div className={styles.detailColumn}>
-                        <h2>Reviews</h2>
-                        {reviews.map((review, index) => (
-                            <div key={index} className={styles.review}>
-                                <div className={styles.review_username}>{review.author_username}: {'⭐'.repeat(review.rating_star)}</div>
-                                <div className={styles.review_comment}>Comment: {review.comment}</div>
-                                <div className={styles.review_time}>Posted: {new Date(review.ctime * 1000).toLocaleDateString()}</div>
-                            </div>
-                        ))}
+                        <h2>🫶🏻真心好評</h2>
+                        <div className={styles.reviewContent}>
+                            {reviews.map((review, index) => (
+                                <div key={index} className={styles.review}>
+                                    <div className={styles.review_username}>{review.author_username}: {'⭐'.repeat(review.rating_star)}</div>
+                                    <div className={styles.review_comment}>{review.comment}</div>
+                                    <div className={styles.review_time}>Posted: {new Date(review.ctime * 1000).toLocaleDateString()}</div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>

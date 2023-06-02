@@ -4,7 +4,8 @@ import { getUserProfile, getSelfOrders, getProductByVariantId, markOrderItemAsDo
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import styles from '../styles/Profile.module.css';
-import { message } from 'antd';
+import { message, Collapse } from 'antd';
+const { Panel } = Collapse;
 
 const Profile = () => {
     const [user, setUser] = useState(null);
@@ -12,6 +13,7 @@ const Profile = () => {
     const router = useRouter();
     const [token, setToken] = useState(null);
     const [userId, setUserId] = useState(null);
+    const [sortOrder, setSortOrder] = useState('desc');
 
     const fetchUserProfile = useCallback(async () => {
         try {
@@ -47,6 +49,7 @@ const Profile = () => {
                     return { ...order, orderItems: detailedOrderItems };
                 }));
                 setOrders(detailedOrders);
+                // document.querySelector('.orderSection').scrollTop = 0;
             } else {
                 message.error('Failed to fetch user orders ', response);
             }
@@ -104,37 +107,71 @@ const Profile = () => {
     return (
         <div className={styles.container}>
             <Header />
-            <div className={styles.profileontainer}>
-                <h1>Profile</h1>
-                <h2>{user.name}</h2>
-                <p>{user.email}</p>
-                <p>{user.provider}</p>
-                <h2>Your Orders</h2>
-                {orders.map(order => (
-                    <div key={order.id} className={styles.orderItem}>
-                        <p>Order ID: {order.id}</p>
-                        <p>Payment Status: {order.status}</p>
-                        {order.orderItems.map(orderItem => (
-                            // set array index as key
-                            <div key={orderItem.index}>
-                                <p>{orderItem.product[0].title}</p>
-                                <img src={orderItem.product[0].main_image} alt={orderItem.title} className={styles.orderItemImage} />
-                                <p>Quantity: {orderItem.qty}</p>
-                                {order.status === 'paid' && orderItem.status !== 'downloaded' && (
-                                    <button
-                                        onClick={() => handleDownload(order.id, orderItem.variant_id, orderItem.file)}
-                                    >
-                                        Download
-                                    </button>
-                                )}
-                                {orderItem.status === 'downloaded' && (
-                                    <span>Downloaded</span>
-                                )}
-                            </div>
-                        ))}            </div>
-                ))}
-                <button onClick={logout} className={styles.button}>Logout</button>
+            <div className={styles.profileContainer}>
+                <div className={styles.profile}>
+                    <h2>會員資料</h2>
+                    <div className={styles.profileSection}>
+                        <p>會員姓名：{user.name}</p>
+                        <p>電子郵件：{user.email}</p>
+                        <p>會員種類：{user.provider}</p>
+                        <button onClick={logout} className={styles.button}>Logout</button>
+                    </div>
+                </div>
+                <div className={styles.order}>
+                    <div className={styles.orderHead}>
+                        <h2>歷史訂單</h2>
+                        <button onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')} className={`bi bi-sort-up ${styles.icon}`} />
+                    </div>
+                    <div className={styles.orderSection}>
+
+                        {orders.sort((a, b) => sortOrder === 'asc' ? a.id - b.id : b.id - a.id).map(order => (
+                            <Collapse
+                                className={styles.orderFrame}
+                                onChange={() => {
+                                    const orderSection = document.querySelector('.orderSection');
+                                    if (orderSection) {
+                                        orderSection.scrollTop = 0;
+                                    }
+                                }}
+                            >
+                                <Panel
+                                    header={`Order ID: ${order.id} - Payment Status: ${order.status}`}
+                                    key={order.id}
+                                    className={`
+                                        ${styles.orderItem}
+                                        ${order.status === 'paid' ? styles.orderPaid : ''}
+                                        ${order.status === 'unpaid' ? styles.orderUnpaid : ''}
+                                        ${order.status === 'processing' ? styles.orderProcessing : ''}
+                                    `}
+                                >
+                                    {order.orderItems.map(orderItem => (
+                                        <div key={orderItem.index} className={styles.orderDetail}>
+                                            <p>{orderItem.product[0].title}</p>
+                                            <img src={orderItem.product[0].main_image} alt={orderItem.title} className={styles.orderItemImage} />
+                                            <p>Quantity: {orderItem.qty}</p>
+                                            {order.status === 'paid' && orderItem.status !== 'downloaded' && (
+                                                <button
+                                                    onClick={() => handleDownload(order.id, orderItem.variant_id, orderItem.file)}
+                                                    className={styles.button}
+                                                >
+                                                    Download
+                                                </button>
+                                            )}
+                                            {orderItem.status === 'downloaded' && (
+                                                <span className={styles.downloaded}>Downloaded</span>
+                                            )}
+                                        </div>
+                                    ))}
+                                    <div className={styles.total}>
+                                        <p>Total: {order.total}</p>
+                                    </div>
+                                </Panel>
+                            </Collapse>
+                        ))}
+                    </div>
+                </div>
             </div>
+
             <Footer />
         </div>
     );

@@ -125,12 +125,19 @@ export const getSelfOrders = (id) => {
     });
 }
 
+
 export const getProductByVariantId = (variantId) => {
     return axiosInstance.get(`/products/product-by-variant?variant_id=${variantId}`);
 };
-// Confirm order payment
-export const confirmOrderPayment = (orderId) => {
-    return axiosInstance.post('/order/confirm', { orderId });
+
+// Confirm an order
+export const confirmOrder = (orderId) => {
+    console.log('confirmOrder', orderId);
+    return axiosInstance.post('/order/confirm', { orderId }, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        },
+    });
 };
 
 // Mark order item as downloaded

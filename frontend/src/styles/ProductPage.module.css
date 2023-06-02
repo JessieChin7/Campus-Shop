@@ -65,13 +65,30 @@
 .details {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
     padding: 20px;
+    width: fit-content;
 }
 
-.detail-column {
-    flex-basis: 45%;
-    padding: 10px;
+.detailColumn {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+
+.reviewContent{
+  overflow-y: auto; 
+  max-height: 1600px;
+}
+
+.detail {
+  background-color: #B3CAB9;
+  padding: 10px;
+  margin: 10px;
+  white-space: pre-wrap;
 }
 
 @keyframes rotate {
@@ -158,6 +175,7 @@
   margin: 20px;
   padding: 20px;
   border: #E0DDC2 solid 1px;
+  background-color: #E0DDC2;
 }
 
 .review_username{

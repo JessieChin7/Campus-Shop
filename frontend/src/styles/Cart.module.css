@@ -57,7 +57,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 60vw;
+  width: 80%;
   gap: 20px;
   border: 0px solid #ccc;
   padding: 20px;
@@ -96,4 +96,64 @@
 .icon:hover {
   cursor: pointer;
   color: #FFFFFF;
+}
+
+.reminder{
+  background-color: #B3CAB9;
+  border-radius: 50px;
+  padding: 10px 20px;
+}
+
+
+
+.checkoutDetail{
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px 20px;
+  font-size: 20px;
+}
+
+.roundButton {
+  width: 10vw;
+  height: 10vw;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: #B3CAB9 solid 1px;
+  background-color: #B3CAB9;
+  color: #000;
+}
+.roundButton:hover{
+  background-color: #FFFFFF;
+  color: #B3CAB9;
+}
+
+.detailText{
+  font-size: 14px;
+}
+.checkoutSection {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  justify-content: center; 
+  align-items: center; 
+  padding: 40px 40px;
+  margin-left: 80px;
+}
+
+.checkoutSub{
+  width: 80%;
+  justify-content: center; 
+  align-items: center; 
+}
+.paySection{
+  display: flex;
+  flex-direction: row;
+  gap: 2%;
+}
+.paySelect{
+  width: 50%;
 }
