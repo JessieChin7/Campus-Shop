@@ -1,12 +1,20 @@
 // components/ProductCard.js
 import { Card } from 'react-bootstrap';
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from '../styles/ProductCard.module.css';
 
 const ProductCard = ({ product }) => (
     <Link href={`/products/${product.id}`} className={styles.cardlinks}>
         <Card className={styles.card}>
-            <Card.Img className={styles.cardImage} variant="top" src={product.main_image} alt={product.title} />
+            <div className={styles.cardImage}>
+                <Image
+                    src={product.main_image}
+                    alt={product.title}
+                    layout="fill"
+                    objectFit="cover"
+                />
+            </div>
             <Card.Body>
                 <Card.Title>{product.title}</Card.Title>
                 <Card.Text>
