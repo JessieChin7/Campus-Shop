@@ -6,6 +6,10 @@
     align-self: center;
     object-fit: cover;
 }
+.imageContainer {
+    width: 240px;
+    height: 240px;
+}
 .cardlinks{
     text-decoration: none; 
     color: black;

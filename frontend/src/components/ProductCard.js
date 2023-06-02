@@ -7,12 +7,13 @@ import styles from '../styles/ProductCard.module.css';
 const ProductCard = ({ product }) => (
     <Link href={`/products/${product.id}`} className={styles.cardlinks}>
         <Card className={styles.card}>
-            <div className={styles.cardImage}>
+            <div className={styles.imageContainer}>
                 <Image
                     src={product.main_image}
                     alt={product.title}
-                    // layout="fill"
-                    // objectFit="cover"
+                    layout="responsive"
+                    width={240}
+                    height={240}
                     className={styles.cardImage}
                 />
             </div>
