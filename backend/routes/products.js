@@ -13,7 +13,21 @@ const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+const sharp = require('sharp');
+const stream = require('stream');
 
+// This function will be used to compress the images
+function resizeImage(file) {
+  const transform = sharp().resize(600, 600).jpeg();
+  return {
+    stream: file.stream.pipe(transform),
+    originalname: file.originalname,
+    buffer: file.buffer,
+    size: file.size,
+    filename: file.filename,
+    mimetype: 'image/jpeg',
+  };
+}
 
 const s3 = new S3Client({
   region: REGION,
@@ -47,6 +61,14 @@ const upload = multer({
       }
 
       cb(null, `${folderName}/${date}-${file.originalname}`);
+    },
+    transformFile: function (req, file, cb) {
+      if (file.mimetype.startsWith('image/')) {
+        // Only compress image files
+        cb(null, resizeImage(file));
+      } else {
+        cb(null, file);
+      }
     },
   }),
 });
@@ -108,17 +130,18 @@ router.post('/',
 router.put('/',
   async function (req, res, next) {
     const productId = req.query.id;
-    const updatedProduct = req.body;
     const product = await productModel.getProductById(productId);
 
     if (!product) {
       return res.status(404).send({ message: "Product not found" });
     }
 
-    // Store old file paths into updatedProduct
-    updatedProduct.main_image = product.main_image;
-    updatedProduct.images = product.images;
-    updatedProduct.file = product.file;
+    // Store old file paths into request
+    req.oldFiles = {
+      main_image: product.main_image,
+      images: product.images,
+      file: product.file,
+    };
 
     next();
   },
@@ -132,9 +155,9 @@ router.put('/',
     const updatedProduct = req.body;
 
     // Overwrite old file paths if new files are uploaded
-    updatedProduct.main_image = req.files.main_image ? req.files.main_image[0].location : updatedProduct.main_image;
-    updatedProduct.images = req.files.images ? req.files.images.map(file => file.location) : updatedProduct.images;
-    updatedProduct.file = req.files.file ? req.files.file[0].location : updatedProduct.file;
+    updatedProduct.main_image = req.files.main_image ? req.files.main_image[0].location : req.oldFiles.main_image;
+    updatedProduct.images = req.files.images ? req.files.images.map(file => file.location) : req.oldFiles.images;
+    updatedProduct.file = req.files.file ? req.files.file[0].location : req.oldFiles.file;
 
     await productModel.updateProduct(productId, updatedProduct);
 
