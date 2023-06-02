@@ -11,8 +11,9 @@ const ProductCard = ({ product }) => (
                 <Image
                     src={product.main_image}
                     alt={product.title}
-                    layout="fill"
-                    objectFit="cover"
+                    // layout="fill"
+                    // objectFit="cover"
+                    className={styles.cardImage}
                 />
             </div>
             <Card.Body>
